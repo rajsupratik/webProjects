@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Currency Converter</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: lightblue;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .container {
+    background-color: lightblue;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+  h2 {
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  select, input, button {
+    padding: 8px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    width: 100%;
+  }
+
+  #convertButton {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+
+  textarea {
+    width: 100%;
+    height: 150px;
+    padding: 5px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    resize: none;
+  }
+
+  #historyButton {
+    display: block;
+    margin-top: 10px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Currency Converter</h2>
+  <select id="fromCurrency">
+    <option value="USD">US Dollar (USD)</option>
+    <option value="EUR">Euro (EUR)</option>
+    <option value="GBP">British Pound (GBP)</option>
+    <option value="JPY">Japanese Yen (JPY)</option>
+    <option value="INR">Indian Rupee (INR)</option>
+  </select>
+  <input type="number" id="amount" placeholder="Amount">
+  <select id="toCurrency">
+    <option value="USD">US Dollar (USD)</option>
+    <option value="EUR">Euro (EUR)</option>
+    <option value="GBP">British Pound (GBP)</option>
+    <option value="JPY">Japanese Yen (JPY)</option>
+    <option value="INR">Indian Rupee (INR)</option>
+  </select>
+  <button id="convertButton">Convert</button>
+  <p id="result"></p>
+  <textarea id="convertedValues" placeholder="Converted values will appear here"></textarea>
+  <button id="historyButton">View Conversion History</button>
+</div>
+
+<script>
+  const conversionRates = {
+    USD: 1,
+    EUR: 0.89,
+    GBP: 0.73,
+    JPY: 109.52,
+    INR: 83.91, // Conversion rate for 1 USD to INR
+  };
+
+  const convertButton = document.getElementById("convertButton");
+  const amountInput = document.getElementById("amount");
+  const fromCurrencySelect = document.getElementById("fromCurrency");
+  const toCurrencySelect = document.getElementById("toCurrency");
+  const resultElement = document.getElementById("result");
+  const convertedValuesTextarea = document.getElementById("convertedValues");
+
+  convertButton.addEventListener("click", function() {
+    const fromCurrency = fromCurrencySelect.value;
+    const toCurrency = toCurrencySelect.value;
+    const amount = parseFloat(amountInput.value);
+
+    if (isNaN(amount)) {
+      resultElement.textContent = "Please enter a valid amount.";
+      return;
+    }
+
+    const convertedAmount = (amount / conversionRates[fromCurrency]) * conversionRates[toCurrency];
+    const formattedConvertedAmount = convertedAmount.toFixed(2);
+
+    resultElement.textContent = `${amount} ${fromCurrency} is approximately ${formattedConvertedAmount} ${toCurrency}.`;
+
+    // Update the converted values textarea
+    const convertedValues = convertedValuesTextarea.value;
+    const newConvertedValue = `${amount} ${fromCurrency} ➜ ${formattedConvertedAmount} ${toCurrency}\n`;
+    convertedValuesTextarea.value = convertedValues + newConvertedValue;
+  });
+
+  const historyButton = document.getElementById("historyButton");
+  historyButton.addEventListener("click", function() {
+    convertedValuesTextarea.style.display = "block";
+  });
+</script>
+</body>
+</html>
